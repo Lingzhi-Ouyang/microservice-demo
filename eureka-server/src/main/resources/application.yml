@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: eureka1
+    active: eureka2
 ---
 spring:
   profiles: eureka1
@@ -13,8 +13,12 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://eureka2.com:7002/eureka/, http://eureka3.com:7003/eureka/
-
+      #defaultZone: http://eureka4.com:7004/eureka/
+      defaultZone: http://eureka2.com:7002/eureka/,http://eureka3.com:7003/eureka/
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 6000
+    renewal-percent-threshold: 0.2
 ---
 spring:
   profiles: eureka2
@@ -27,8 +31,11 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://eureka1.com:7001/eureka/, http://eureka3.com:7003/eureka/
-
+      defaultZone: http://eureka1.com:7001/eureka/,http://eureka3.com:7003/eureka/
+  server:
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 60000
+    renewal-percent-threshold: 0.2
 ---
 spring:
   profiles: eureka3
@@ -41,5 +48,11 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://eureka1.com:7001/eureka/, http://eureka2.com:7002/eureka/
+      defaultZone: http://eureka1.com:7001/eureka/,http://eureka2.com:7002/eureka/
+  server:
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 600
+    renewal-percent-threshold: 0.2
+
+
 

@@ -1,14 +1,21 @@
+spring:
+  profiles:
+    active: order
+---
 server:
   port: 8080
 
 spring:
+  profiles: order
   application:
     name: order-service
 
 eureka:
+  instance:
+    instance-id: ${spring.profiles}
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://eureka1.com:7001/eureka,http://eureka2.com:7002/eureka
+      defaultZone: http://eureka1.com:7001/eureka,http://eureka2.com:7002/eureka,http://eureka3.com:7003/eureka
 
