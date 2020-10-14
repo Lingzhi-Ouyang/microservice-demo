@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: gateway
+---
+server:
+  port: 7777
+
+spring:
+  profiles: gateway
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: payment_route
+          uri: lb://order-service
+          predicates:
+            - Path=/order/get/**
+            - After=2020-10-01T00:00:00+08:00[Asia/Shanghai]
+
+eureka:
+  instance:
+    hostname: gateway-service
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka1.com:7001/eureka
+

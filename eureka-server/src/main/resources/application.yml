@@ -16,7 +16,7 @@ eureka:
       #defaultZone: http://eureka4.com:7004/eureka/
       defaultZone: http://eureka2.com:7002/eureka/,http://eureka3.com:7003/eureka/
   server:
-    enable-self-preservation: false
+    enable-self-preservation: true
     eviction-interval-timer-in-ms: 6000
     renewal-percent-threshold: 0.2
 ---
@@ -34,7 +34,7 @@ eureka:
       defaultZone: http://eureka1.com:7001/eureka/,http://eureka3.com:7003/eureka/
   server:
     enable-self-preservation: true
-    eviction-interval-timer-in-ms: 60000
+    eviction-interval-timer-in-ms: 6000
     renewal-percent-threshold: 0.2
 ---
 spring:
@@ -51,7 +51,7 @@ eureka:
       defaultZone: http://eureka1.com:7001/eureka/,http://eureka2.com:7002/eureka/
   server:
     enable-self-preservation: true
-    eviction-interval-timer-in-ms: 600
+    eviction-interval-timer-in-ms: 6000
     renewal-percent-threshold: 0.2
 
 
