@@ -17,6 +17,7 @@
       <module>eureka-server4</module>
       <module>order-service-openfeign</module>
       <module>gateway</module>
+      <module>infrastructure-config</module>
   </modules>
 
   <properties>
