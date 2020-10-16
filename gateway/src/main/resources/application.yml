@@ -15,7 +15,7 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: payment_route
+        - id: order_route
           uri: lb://order-service
           predicates:
             - Path=/order/get/**
@@ -23,7 +23,8 @@ spring:
 
 eureka:
   instance:
-    hostname: gateway-service
+    hostname: gateway-service.com
+    instance-id: ${spring.profiles}
   client:
     register-with-eureka: true
     fetch-registry: true

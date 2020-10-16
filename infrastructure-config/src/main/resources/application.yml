@@ -1,7 +1,12 @@
+spring:
+  profiles:
+    active: config-center
+---
 server:
   port: 7800
 
 spring:
+  profiles: config-center
   application:
     name:  infrastructure-config
   cloud:
@@ -12,8 +17,22 @@ spring:
           search-paths:
             - config-repo
       label: master
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root # 用默认名guest无法通过health check！
+    password: root
 
 eureka:
+  instance:
+    instance-id: ${spring.profiles}
+    hostname: config-center.com
   client:
     service-url:
       defaultZone: http://eureka1.com:7001/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'bus-refresh'

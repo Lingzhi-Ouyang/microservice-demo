@@ -3,6 +3,8 @@ package com.njoy.springcloud.controller;
 import com.njoy.springcloud.entities.ApiResponse;
 import com.njoy.springcloud.entities.Payment;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +19,24 @@ import javax.annotation.Resource;
  */
 @RestController
 @Slf4j
+@RefreshScope
 public class OrderController {
 
     public static final String PAYMENT_URL = "http://PAYMENT-SERVICE";
 
     @Resource
     private RestTemplate restTemplate;
+
+    @Value("${log.info}")
+    private String logInfo;
+
+    @Value("${log.variable}")
+    private String var;
+
+    @GetMapping("/logInfo")
+    public String getLogInfo() {
+        return logInfo;
+    }
 
     @GetMapping(value = "/order/create")
     public ApiResponse<Payment> create(Payment payment){

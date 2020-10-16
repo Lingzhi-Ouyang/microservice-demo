@@ -1,0 +1,51 @@
+spring:
+  profiles:
+    active: open-feign-order-service
+---
+server:
+  port: 8081
+
+spring:
+  profiles: open-feign-order-service
+  application:
+    name: order-service
+  cloud:
+    config:
+      label: master
+      name: config
+      profile: dev
+      uri: http://config-center.com:7800
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root
+    password: root
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1
+
+eureka:
+  instance:
+    instance-id: ${spring.profiles}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka1.com:7001/eureka
+
+ribbon:
+  ReadTimeout: 20000
+  ConnectTimeout: 20000
+
+logging:
+  level:
+    com.njoy.springcloud.service.OrderService: debug
+
+# 暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
