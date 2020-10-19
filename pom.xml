@@ -18,6 +18,8 @@
       <module>order-service-openfeign</module>
       <module>gateway</module>
       <module>infrastructure-config</module>
+      <module>stream-rabbitmq-provider</module>
+      <module>stream-rabbitmq-consumer</module>
   </modules>
 
   <properties>

@@ -36,7 +36,7 @@ eureka:
     fetch-registry: true
     service-url:
       #defaultZone: http://eureka4.com:7004/eureka
-      defaultZone: http://eureka1.com:7001/eureka,http://eureka2.com:7002/eureka,http://eureka3.com:7003/eureka
+      defaultZone: http://eureka1.com:7001/eureka
 ---
 server:
   port: 8002

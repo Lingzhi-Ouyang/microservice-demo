@@ -1,0 +1,39 @@
+server:
+  port: 8011
+
+spring:
+  application:
+    name: cloud-stream-provider
+  cloud:
+    stream:
+      binders:
+        my-rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: root
+                password: root
+      bindings:
+        output: # 设置通道为 output / input
+          destination: test
+          content-type: application/json
+          binder: my-rabbit
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root # 用默认名guest无法通过health check！rabbit启动命令不要用默认guest/guest
+    password: root
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 2
+    lease-expiration-duration-in-seconds: 5
+    instance-id: stream-provider-8011
+    prefer-ip-address: true

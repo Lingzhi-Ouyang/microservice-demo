@@ -1,0 +1,86 @@
+spring:
+  profiles:
+    active: cloud-stream-consumer8012
+---
+server:
+  port: 8012
+
+spring:
+  profiles: cloud-stream-consumer8012
+  application:
+    name: cloud-stream-consumer
+  cloud:
+    stream:
+      binders:
+        my-rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: root
+                password: root
+      bindings:
+        input: # 设置通道为 output / input
+          destination: test
+          content-type: application/json
+          binder: my-rabbit
+          group: groupA
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root # 用默认名guest无法通过health check！rabbit启动命令不要用默认guest/guest
+    password: root
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 2
+    lease-expiration-duration-in-seconds: 5
+    instance-id: stream-consumer-8012
+    prefer-ip-address: true
+---
+server:
+  port: 8013
+
+spring:
+  profiles: cloud-stream-consumer8013
+  application:
+    name: cloud-stream-consumer
+  cloud:
+    stream:
+      binders:
+        my-rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: root
+                password: root
+      bindings:
+        input: # 设置通道为 output / input
+          destination: test
+          content-type: application/json
+          binder: my-rabbit
+          group: groupA
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root # 用默认名guest无法通过health check！rabbit启动命令不要用默认guest/guest
+    password: root
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 2
+    lease-expiration-duration-in-seconds: 5
+    instance-id: stream-consumer-8013
+    prefer-ip-address: true
+

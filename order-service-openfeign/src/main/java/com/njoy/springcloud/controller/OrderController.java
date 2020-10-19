@@ -31,30 +31,28 @@ public class OrderController {
     @Value("${log.variable}")
     private String var;
 
+    @Value("${delay:0}")
+    private String delay;
+
     @GetMapping("/logInfo")
     public String getLogInfo() {
         return logInfo;
     }
 
+    @GetMapping("/delay")
+    public String getDelay() {
+        return delay;
+    }
+
     @GetMapping(value = "/order/get/{id}")
     public ApiResponse<Payment> queryById(@PathVariable("id") Long id) {
-        log.info("Query by id: {}, {}", id,Long.class.getName());
-        Map<String,Object> map = new HashMap<>();
-//        map.put("alive", "coding every day");
-//        map.put("out", System.out);
-//        String expression = "out.print(alive)";
-//        CodeEngine.convert(expression, map);
-        map.put("log", log);
-        map.put("id", id);
-        String exp = "log.info(\"" + logInfo + "\"," + var + ")";
-        log.info(exp);
-        CodeEngine.convert(exp, map);
+        log.info("query by id = {}, delay: {}", id, delay);
         return orderService.queryById(id);
     }
 
     @GetMapping(value = "/order/get")
     public ApiResponse<Payment> queryById1(@RequestParam Long id){
-        log.info("query by id: {}", id);
+        log.info("Query by id: {}, delay: {}", id, delay);
         return orderService.queryById(id);
     }
 }

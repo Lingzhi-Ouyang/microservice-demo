@@ -20,7 +20,7 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username: root # 用默认名guest无法通过health check！
+    username: root # 用默认名guest无法通过health check！rabbit启动命令不要用默认guest/guest
     password: root
 
 eureka:
