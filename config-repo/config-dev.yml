@@ -1,4 +1,4 @@
 log:
   info: "For test. Query by id: {}"
   variable: id
-delay: 2000
+delay: 3000
