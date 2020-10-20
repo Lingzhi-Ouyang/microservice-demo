@@ -13,4 +13,4 @@ jobs:
     steps:
     - name: configuration broadcast to gateway 
       run: |
-        curl -X GET http://localhost:8011/send
+        curl -X GET http://58.212.52.174:8011/send
