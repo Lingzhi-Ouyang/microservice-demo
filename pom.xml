@@ -20,6 +20,7 @@
       <module>infrastructure-config</module>
       <module>stream-rabbitmq-provider</module>
       <module>stream-rabbitmq-consumer</module>
+      <module>fault-injector</module>
   </modules>
 
   <properties>

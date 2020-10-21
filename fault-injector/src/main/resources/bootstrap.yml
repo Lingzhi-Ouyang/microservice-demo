@@ -1,0 +1,50 @@
+spring:
+  profiles:
+    active: fault-injector
+---
+server:
+  port: 7900
+
+spring:
+  profiles: fault-injector
+  application:
+    name: fault-injector
+  cloud:
+    config:
+      label: master
+      name: config
+      profile: dev
+      uri: http://config-center.com:7800
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root
+    password: root
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1
+
+eureka:
+  instance:
+    instance-id: ${spring.profiles}
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 10
+    service-url:
+      defaultZone: http://eureka1.com:7001/eureka
+
+logging:
+  level:
+    com.njoy.springcloud.service.OrderService: debug
+
+# 暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

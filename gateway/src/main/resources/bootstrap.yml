@@ -25,6 +25,24 @@ spring:
       name: config
       profile: dev
       uri: http://config-center.com:7800
+    stream:
+      binders:
+        my-rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: root
+                password: root
+      bindings:
+        input: # 设置通道为 output / input
+          destination: test
+          content-type: application/json
+          binder: my-rabbit
+          group: groupA
+
   rabbitmq:
     host: localhost
     port: 5672
