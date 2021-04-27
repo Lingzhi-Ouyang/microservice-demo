@@ -21,6 +21,8 @@
       <module>stream-rabbitmq-provider</module>
       <module>stream-rabbitmq-consumer</module>
       <module>fault-injector</module>
+    <module>injection-agent</module>
+      <module>payment-zookeeper</module>
   </modules>
 
   <properties>
@@ -31,6 +33,7 @@
     <log4j.version>1.2.17</log4j.version>
     <lombok.version>1.16.18</lombok.version>
     <mysql.version>5.1.47</mysql.version>
+    <mongo.version>2.4.5</mongo.version>
     <druid.version>1.1.16</druid.version>
     <mybatis.spring.boot.version>1.3.0</mybatis.spring.boot.version>
 <!--    <projectreactor.netty.version>0.9.12.RELEASE</projectreactor.netty.version>-->
@@ -68,6 +71,12 @@
         <artifactId>mysql-connector-java</artifactId>
         <version>${mysql.version}</version>
       </dependency>
+      <!--mongodb-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        <version>${mongo.version}</version>
+      </dependency>
       <dependency>
         <groupId>com.alibaba</groupId>
         <artifactId>druid</artifactId>
@@ -82,6 +91,7 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>log4j</groupId>
