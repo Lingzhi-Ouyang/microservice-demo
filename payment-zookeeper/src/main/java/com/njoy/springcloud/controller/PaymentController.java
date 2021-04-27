@@ -7,6 +7,7 @@ import com.njoy.springcloud.entities.ApiResponse;
 import com.njoy.springcloud.entities.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -14,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -35,14 +37,66 @@ public class PaymentController {
     }
 
 
+    /**
+     * 区别
+     * 插入重复数据
+     * 　　insert: 若新增数据的主键已经存在，则会抛 org.springframework.dao.DuplicateKeyException 异常提示主键重复，不保存当前数据。
+     * 　　save: 若新增数据的主键已经存在，则会对当前已经存在的数据进行修改操作。
+     *
+     * 批操作
+     * 　　insert: 可以一次性插入一整个列表，而不用进行遍历操作，效率相对较高
+     * 　　save: 需要遍历列表，进行一个个的插入
+     */
+
+    public static Map<String, String> convertClassToMap(Object object){
+        Class clazz = object.getClass();
+        Map<String, String> map = new TreeMap<>();
+        try {
+            //向上循环  遍历父类
+            for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+                Field[] field = clazz.getDeclaredFields();
+                for (Field f : field) {
+                    f.setAccessible(true);
+                    if (f.get(object) == null) {
+                        map.put(f.getName(), "");
+                    }else{
+                        map.put(f.getName(), f.get(object).toString());
+                    }
+                }
+            }
+        } catch (IllegalAccessException e) {
+            log.warn(e.getMessage());
+        }
+        return map;
+    }
+
+
+    public static Map<String, Object> objectToMap(Object obj) throws IllegalAccessException {
+        Map<String, Object> map = new HashMap<>();
+        Class<?> clazz = obj.getClass();
+        for (Field field : clazz.getDeclaredFields()) {
+            field.setAccessible(true);
+            String fieldName = field.getName();
+            Object value = field.get(obj);
+            map.put(fieldName, value);
+        }
+        return map;
+    }
+
+
     @PostMapping(value = "/payment/create")
-    public ApiResponse<Payment> create(@RequestBody Payment payment){
-        log.info("create payment : " + payment);
-        Payment saveResult = this.mongoTemplate.save(payment, "collectionName1");
-        log.info("save payment result : " + saveResult);
-        Payment insertResult = this.mongoTemplate.insert(payment, "collectionName2");
-        log.info("insert payment result : " + insertResult);
-        return new ApiResponse(200, "create success at port " + serverPort, saveResult);
+    public ApiResponse<Payment> create(@RequestBody Payment payment) {
+        log.info("create payment : {}", payment);
+        try {
+//            Map map = objectToMap(payment);
+            Payment saveResult = this.mongoTemplate.save(payment, "payment1");
+            log.info("save result : {}", saveResult);
+            Payment insertResult = this.mongoTemplate.insert(payment, "payment2");
+            log.info("insert result : {}", insertResult);
+        } catch (  DuplicateKeyException ex) {
+            log.warn(ex.getMessage());
+        }
+        return new ApiResponse(200, "create success");
     }
 
 
@@ -51,10 +105,11 @@ public class PaymentController {
         log.info("query payment : " + id);
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(id));
-        Map result = this.mongoTemplate.findOne(query, Map.class,"collectionName1");
-        log.info("query payment result : " + result);
+        Map result = this.mongoTemplate.findOne(query, Map.class,"payment1");
+        log.info("query payment result : {}", result);
         return new ApiResponse(200, "query success at port " + serverPort, result);
     }
+
 
     @PostMapping("/mongoSave")
     public ApiResponse mongoSave(){
@@ -64,11 +119,16 @@ public class PaymentController {
         map.put("age", "26");
         map.put("wechat", "mk");
         Map saveResult = this.mongoTemplate.save(map, "collectionName1");
-        log.info("save payment result : " + saveResult);
-        Map insertResult = this.mongoTemplate.insert(map, "collectionName2");
-        log.info("insert payment result : " + insertResult);
-        return new ApiResponse(200, "新增成功", insertResult);
+        log.info("save result : {}", saveResult);
+        try{
+            Map insertResult = this.mongoTemplate.insert(map, "collectionName2");
+            log.info("insert payment result : {}", insertResult);
+        } catch (DuplicateKeyException dupKey){
+            log.warn(dupKey.getMessage());
+        }
+        return new ApiResponse(200, "新增成功", saveResult);
     }
+
 
     /**
      * @description:MongoDB根据条件删除数据
@@ -84,6 +144,7 @@ public class PaymentController {
         DeleteResult deleteResult = this.mongoTemplate.remove(query, "collectionName1");
         return new ApiResponse(200, "删除成功", deleteResult.toString());
     }
+
 
     /**
      * @description:MongoDB根据条件更新数据
@@ -103,8 +164,9 @@ public class PaymentController {
         update.set("age", "120");
         update.set("updateTime", new Date());
         UpdateResult updateResult = this.mongoTemplate.updateMulti(query, update,"collectionName1");
-        return new ApiResponse(200, "更新成功", updateResult);
+        return new ApiResponse(200, "更新成功", updateResult.toString());
     }
+
 
     /**
      * @description:MongoDB获取数据库中的所有文档集合
@@ -119,6 +181,7 @@ public class PaymentController {
         return new ApiResponse(200, "获取集合名", set);
     }
 
+
     /**
      * @description:MongoDB根据条件查询一条数据
      * @param
@@ -131,8 +194,9 @@ public class PaymentController {
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is("10086"));
         Map result = this.mongoTemplate.findOne(query, Map.class,"collectionName1");
-        return new ApiResponse(200, "查询成功", result);
+        return new ApiResponse(200, "查询成功", result.toString());
     }
+
 
     /**
      * @description:MongoDB根据条件查询列表数据
