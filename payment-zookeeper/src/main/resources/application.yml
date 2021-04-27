@@ -1,0 +1,65 @@
+spring:
+  profiles:
+    active: payment4
+---
+server:
+  port: 8004
+
+spring:
+  profiles: payment4
+  application:
+    name: payment-zookeeper
+  cloud:
+    zookeeper:
+      connect-string: localhost:2181, localhost:2182, localhost:2183
+  data:
+    mongodb:
+#      uri: mongodb://root:123456@localhost:27017/admin
+      host: 127.0.0.1
+      port: 27017
+      username: 'root'
+      password: '123456'
+      database: 'admin'
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1
+---
+server:
+  port: 8005
+
+spring:
+  profiles: payment5
+  application:
+    name: payment-zookeeper
+  cloud:
+    zookeeper:
+      connect-string: localhost:2181, localhost:2182, localhost:2183
+  data:
+    mongodb:
+      #      uri: mongodb://root:123456@localhost:27017/admin
+      host: 127.0.0.1
+      port: 27017
+      username: 'root'
+      password: '123456'
+      database: 'admin'
+---
+server:
+  port: 8006
+
+spring:
+  profiles: payment6
+  application:
+    name: payment-zookeeper
+  cloud:
+    zookeeper:
+      connect-string: localhost:2181, localhost:2182, localhost:2183
+  data:
+    mongodb:
+      #      uri: mongodb://root:123456@localhost:27017/admin
+      host: 127.0.0.1
+      port: 27017
+      username: 'root'
+      password: '123456'
+      database: 'admin'
