@@ -13,9 +13,9 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-#      defaultZone: http://eureka1.com:7001/eureka/
+      defaultZone: http://eureka1.com:7001/eureka/
 #      defaultZone: http://eureka4.com:7004/eureka/
-      defaultZone: http://eureka2.com:7002/eureka/,http://eureka3.com:7003/eureka/
+#      defaultZone: http://eureka2.com:7002/eureka/,http://eureka3.com:7003/eureka/
   server:
     enable-self-preservation: true
     eviction-interval-timer-in-ms: 6000
